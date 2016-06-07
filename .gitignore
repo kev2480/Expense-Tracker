@@ -74,5 +74,3 @@ node_modules
 
 #Dist files
 dist
-
-js/bundle.js
