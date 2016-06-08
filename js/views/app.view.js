@@ -88,9 +88,9 @@ var AppView = Backbone.View.extend( {
     var perMonth;
     if ( this.$monthRadio.is(':checked') )
     {
-        perMonth = this.$newExpenseAmount.val()
+        perMonth = this.$newExpenseAmount.val();
     } else {
-        perMonth = this.$newExpenseAmount.val() / 12;
+        perMonth = +((this.$newExpenseAmount.val() / 12).toFixed(2));
     }
 
     expensesCollection.create({
