@@ -1,5 +1,10 @@
-<div class="view">
-	<label>{{title}}</label>
-  <label>{{amount}}</label>
-	<button class="destroy">Delete</button>
-</div>
+	<h4 class="list-group-item-heading">{{title}}</h4>
+	<div class="row">
+		<div class="col-lg-9">
+			<p class="list-group-item-text text-primary">{{amount}}</p>
+			<p class="list-group-item-text">{{#if isMonthly}} Monthly {{else}} Annualy{{/if}}</p>
+		</div>
+		<div class="col-lg-3">
+			<button type="submit" class="btn btn-primary destroy">Delete</button>
+		</div>
+	</div>
