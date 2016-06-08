@@ -85,10 +85,19 @@ var AppView = Backbone.View.extend( {
   //Create new expense
   createOnSubmit: function(e) {
     e.preventDefault();
+    var perMonth;
+    if ( this.$monthRadio.is(':checked') )
+    {
+        perMonth = this.$newExpenseAmount.val()
+    } else {
+        perMonth = this.$newExpenseAmount.val() / 12;
+    }
+
     expensesCollection.create({
-      title:     this.$newExpenseTitle.val(),
-      amount:    this.$newExpenseAmount.val(),
-      isMonthly: this.$monthRadio.is(':checked'),
+      title:          this.$newExpenseTitle.val(),
+      amount:         this.$newExpenseAmount.val(),
+      amountPerMonth: perMonth,
+      isMonthly:      this.$monthRadio.is(':checked'),
       color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
     });
     this.$newExpenseTitle.val("");
