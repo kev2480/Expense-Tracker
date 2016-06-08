@@ -13,7 +13,7 @@ export default class PieChart {
 
     let titles = this.expenses.pluck('title');
     let colors = this.expenses.pluck('color');
-    let amounts = this.expenses.pluck('amount');
+    let amounts = this.expenses.pluck('amountPerMonth');
 
   //  console.log(titles + " " + colors + " " + amounts);
 
@@ -46,7 +46,7 @@ export default class PieChart {
     this.expenses = expenses;
     let titles = this.expenses.pluck('title');
     let colors = this.expenses.pluck('color');
-    let amounts = this.expenses.pluck('amount');
+    let amounts = this.expenses.pluck('amountPerMonth');
 
     this.myPieChart.data.labels = titles;
     this.myPieChart.data.datasets.data = amounts;
