@@ -12,7 +12,7 @@ var Expense = Backbone.Model.extend({
 		defaults: {
 			title: 'Expense default',
 			amount: 1.50,
-			isMonthly: true
+			isMonthly: true,
 		},
 });
 
