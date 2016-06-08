@@ -9,7 +9,7 @@ var expenseTemplate = require('../templates/expense.handlebars');
 
 var ExpenseView = Backbone.View.extend( {
   //Tag
-  tagName:  'li',
+  tagName:  'div',
 
   //Template
   template: expenseTemplate,

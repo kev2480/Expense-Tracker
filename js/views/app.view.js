@@ -27,6 +27,7 @@ var AppView = Backbone.View.extend( {
      this.$newExpenseForm   = this.$('#new-expense');
      this.$newExpenseTitle  = this.$('#name');
      this.$newExpenseAmount = this.$('#cost');
+     this.$monthRadio       = this.$('#monthly');
 
      //Listening
      //On an add
@@ -55,7 +56,17 @@ var AppView = Backbone.View.extend( {
     var view = new ExpenseView({ model: expense });
 
     //Render.
-    this.$expenseList.append(view.render().el);
+    var element = view.render().el;
+
+    element.className += " list-group-item";
+
+    /** To Animate - Needs fixing
+
+    element.className += " list-group-item list-group-hidden";
+    this.$('#expense-list div:last-child').removeClass("list-group-hidden").addClass("pullDown");*/
+
+    //Render.
+    this.$expenseList.append(element);
   },
 
   //Add all
@@ -70,8 +81,9 @@ var AppView = Backbone.View.extend( {
   createOnSubmit: function(e) {
     e.preventDefault();
     expensesCollection.create({
-      title: this.$newExpenseTitle.val(),
-      amount: this.$newExpenseAmount.val()
+      title:     this.$newExpenseTitle.val(),
+      amount:    this.$newExpenseAmount.val(),
+      isMonthly: this.$monthRadio.is(':checked')
     });
     this.$newExpenseTitle.val("");
     this.$newExpenseAmount.val("");
