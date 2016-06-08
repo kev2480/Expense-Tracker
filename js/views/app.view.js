@@ -3,6 +3,7 @@ var Backbone    = require('backbone');
 var Expenses    = require('../collections/expenses');
 var ExpenseView = require('./expense.view');
 var _           = require('underscore');
+import PieChart from '../PieChart';
 
 var expensesCollection = new Expenses();
 Backbone.$ = $;
@@ -29,13 +30,17 @@ var AppView = Backbone.View.extend( {
      this.$newExpenseAmount = this.$('#cost');
      this.$monthRadio       = this.$('#monthly');
 
+
      //Listening
      //On an add
      this.listenTo(expensesCollection, 'add', this.addOne);
+     this.listenTo(expensesCollection, 'add', this.buildChart);
      //On reset
      this.listenTo(expensesCollection, 'reset', this.addAll);
+     this.listenTo(expensesCollection, 'reset', this.buildChart);
      //On something being deleted
      this.listenTo(expensesCollection, 'remove', this.addAll);
+     this.listenTo(expensesCollection, 'remove', this.buildChart);
      //All
      this.listenTo(expensesCollection, 'all', _.debounce(this.render, 0));
 
@@ -83,13 +88,26 @@ var AppView = Backbone.View.extend( {
     expensesCollection.create({
       title:     this.$newExpenseTitle.val(),
       amount:    this.$newExpenseAmount.val(),
-      isMonthly: this.$monthRadio.is(':checked')
+      isMonthly: this.$monthRadio.is(':checked'),
+      color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
     });
     this.$newExpenseTitle.val("");
     this.$newExpenseAmount.val("");
   },
 
+  buildChart: function(){
+    console.log("building chart");
+    //var pie = require('../PieChart');
+    if ( typeof  this.pieChart !== 'undefined') {
+      //Pie chart already exists. update
+      //this.pieChart.updatePie(expensesCollection);
+      this.pieChart.destroyPie();
+    } else {
 
+    }
+    this.pieChart = new PieChart($("#chart"), expensesCollection);
+
+  }
 });
 
 module.exports = AppView;
