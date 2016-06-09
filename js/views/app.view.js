@@ -29,6 +29,7 @@ var AppView = Backbone.View.extend( {
      this.$newExpenseTitle  = this.$('#name');
      this.$newExpenseAmount = this.$('#cost');
      this.$monthRadio       = this.$('#monthly');
+     this.$total            = this.$('#total');
 
 
      //Listening
@@ -41,6 +42,7 @@ var AppView = Backbone.View.extend( {
      //On something being deleted
      this.listenTo(expensesCollection, 'remove', this.addAll);
      this.listenTo(expensesCollection, 'remove', this.buildChart);
+     this.listenTo(expensesCollection, 'remove', this.buildTotal);
      //All
      this.listenTo(expensesCollection, 'all', _.debounce(this.render, 0));
 
@@ -58,6 +60,12 @@ var AppView = Backbone.View.extend( {
   //Add one
   addOne: function(expense) {
     console.log("addOne called");
+    //Convert old amounts per month from old versions
+    expense.set(
+      {
+        amountPerMonth: +(expense.get('amountPerMonth'))
+      }
+    );
     var view = new ExpenseView({ model: expense });
 
     //Render.
@@ -72,6 +80,7 @@ var AppView = Backbone.View.extend( {
 
     //Render.
     this.$expenseList.append(element);
+    this.buildTotal();
   },
 
   //Add all
@@ -79,7 +88,18 @@ var AppView = Backbone.View.extend( {
     console.log("addAll called");
     this.$expenseList.empty();
 
+    expensesCollection.each(this.updateExpenses, this);
     expensesCollection.each(this.addOne, this);
+  },
+
+  //Fix incorrectly stored amounts, convert to decimanl from string.
+  updateExpenses: function(expense){
+    expense.set(
+      {
+        amountPerMonth: +(expense.get('amountPerMonth'))
+      }
+    );
+    expense.save();
   },
 
   //Create new expense
@@ -88,7 +108,7 @@ var AppView = Backbone.View.extend( {
     var perMonth;
     if ( this.$monthRadio.is(':checked') )
     {
-        perMonth = this.$newExpenseAmount.val();
+        perMonth = +(this.$newExpenseAmount.val());
     } else {
         perMonth = +((this.$newExpenseAmount.val() / 12).toFixed(2));
     }
@@ -116,6 +136,12 @@ var AppView = Backbone.View.extend( {
     }
     this.pieChart = new PieChart($("#chart"), expensesCollection);
 
+  },
+
+  buildTotal: function(){
+    var amounts = expensesCollection.pluck('amountPerMonth');
+    var sum = amounts.reduce((a, b) => a + b, 0);
+    this.$total.text("Totals: " + sum.toFixed(2) + " per month, " + (sum * 12).toFixed(2) + " per year" );
   }
 });
 
